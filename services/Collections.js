@@ -32,4 +32,4 @@ Collections.filterByCategory = () => {
 
 };
 
-export { Collections };
+module.exports = Collections;

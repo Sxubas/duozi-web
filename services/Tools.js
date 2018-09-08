@@ -18,4 +18,4 @@ Tools.dictionarySearch = () => {
 
 }
 
-export { Tools };
+module.exports = Tools;
