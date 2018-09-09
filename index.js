@@ -1,11 +1,14 @@
 'use strict'
+require('dotenv').config() //Set environment variables from private file
 const Users = require('./services/Users');
 const Collections = require('./services/Collections');
 const Tools = require('./services/Tools');
 const MongoClient = require('mongodb');
 const express = require('express');
 const bodyParser = require('body-parser');
-require('dotenv').config() //Set environment variables from private file
+const multer = require('multer');
+const upload = multer({ storage: multer.memoryStorage()});
+const cors = require('cors')
 
 //
 //Main entry point. Responsible of setting express app, mongoDB connections 
@@ -13,7 +16,18 @@ require('dotenv').config() //Set environment variables from private file
 //
 
 const app = express();
-app.use(bodyParser.json()); //For parsing application/json in request's body
+app.use(bodyParser());
+app.use(function(req, res, next) {
+  req.rawBody = '';
+  req.setEncoding('utf8')
+  req.on('data', function(chunk) { 
+    req.rawBody += chunk;
+  });
+
+  req.on('end', function() {
+    next();
+  });
+}); 
 
 const mongoSetup = (callback) => {
   const password = process.env.WEB_DEV_MONGODB_PASSWORD;
@@ -32,10 +46,13 @@ const mongoSetup = (callback) => {
 //Setting up endpoints
 const expressSetup = () => {
 
+  app.use(cors());
+
   app.get('/', (req, res) => {
     res.json({ 'message': 'Server running!' });
   });
 
+  app.post('/', upload.single('file'), Tools.recognizeCharacters);
 }
 
 //Begin listening to requests
