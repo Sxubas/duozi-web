@@ -1,5 +1,5 @@
-'use strict'
-require('dotenv').config() //Set environment variables from private file
+'use strict';
+require('dotenv').config(); //Set environment variables from private file
 const Users = require('./services/Users');
 const Collections = require('./services/Collections');
 const Tools = require('./services/Tools');
@@ -8,7 +8,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const upload = multer({ storage: multer.memoryStorage()});
-const cors = require('cors')
+const cors = require('cors');
 
 //
 //Main entry point. Responsible of setting express app, mongoDB connections 
@@ -16,7 +16,9 @@ const cors = require('cors')
 //
 
 const app = express();
-app.use(bodyParser());
+let db;
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(function(req, res, next) {
   req.rawBody = '';
   req.setEncoding('utf8')
@@ -57,6 +59,18 @@ const expressSetup = () => {
 
 //Begin listening to requests
 const startServer = (mongoClient) => {
+  db = mongoClient.db('duozi');
+  app.post('/users', (req, res) => {
+    const cbk = function(obj) {
+      if(obj) res.send(obj);
+      else {
+        res.status(500)
+        res.send('error')
+      }
+    }
+    console.log(req.body);
+    Users.signup(req, db, cbk);
+  })
   app.listen(8080, () => {
     console.log("Server successfully run");
   });
