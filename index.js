@@ -16,20 +16,15 @@ const cors = require('cors');
 //
 
 const app = express();
-let db;
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(function(req, res, next) {
-  req.rawBody = '';
-  req.setEncoding('utf8')
-  req.on('data', function(chunk) { 
-    req.rawBody += chunk;
-  });
 
-  req.on('end', function() {
-    next();
-  });
-}); 
+app.use(bodyParser.json({
+  type: 'application/json'
+}));
+app.use(bodyParser.raw({
+  type: 'multipart/form-data',
+  limit: '20mb'
+}));
+app.use(cors());
 
 const mongoSetup = (callback) => {
   const password = process.env.WEB_DEV_MONGODB_PASSWORD;
@@ -37,6 +32,8 @@ const mongoSetup = (callback) => {
   if (!password) throw new Error("Could not find password")
 
   const uri = `mongodb://ja-manrique:${password}@duozi-web-shard-00-00-072t6.mongodb.net:27017,duozi-web-shard-00-01-072t6.mongodb.net:27017,duozi-web-shard-00-02-072t6.mongodb.net:27017/test?ssl=true&replicaSet=Duozi-web-shard-0&authSource=admin&retryWrites=true`;
+
+  //Connect to mongo cloud
   MongoClient.connect(uri, function (err, client) {
     if (err) throw err;
     else console.log('Successfully connected to mongoDB');
@@ -46,20 +43,14 @@ const mongoSetup = (callback) => {
 }
 
 //Setting up endpoints
-const expressSetup = () => {
+const expressSetup = (mongoClient) => {
 
-  app.use(cors());
-
+  const db = mongoClient.db('duozi');
+  
   app.get('/', (req, res) => {
     res.json({ 'message': 'Server running!' });
   });
 
-  app.post('/', upload.single('file'), Tools.recognizeCharacters);
-}
-
-//Begin listening to requests
-const startServer = (mongoClient) => {
-  db = mongoClient.db('duozi');
   app.post('/users', (req, res) => {
     const cbk = function(obj) {
       if(obj) res.send(obj);
@@ -70,11 +61,25 @@ const startServer = (mongoClient) => {
     }
     console.log(req.body);
     Users.signup(req, db, cbk);
-  })
+  });
+
+  //Si necesita el mongo porfa use algo mas parecido a esto pls:
+  app.get('/ejemplo', (req, res) => {
+    Collections.getAllwords(req, res, mongoClient); 
+  });
+  //Así no nos llenamos tanto de cbk(null) o con parametros raros por ahí volando
+
+  app.post('/tools/recognize', Tools.recognizeCharacters);
+  app.put('/test', Collections.modifyWord);
+
+  startServer();
+}
+
+//Begin listening to requests
+const startServer = () => {
   app.listen(8080, () => {
     console.log("Server successfully run");
   });
 }
 
-expressSetup();
-mongoSetup(startServer);
+mongoSetup(expressSetup);

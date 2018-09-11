@@ -20,11 +20,11 @@ Collections.addWord = (req, db, cbk) => {
   });
 };
 
-Collections.modifyWord = () => {
-  
-
-  });
-};
+Collections.modifyWord = (req, res) => {
+  //Body json text
+  console.log(req.body);
+  res.send(req.body);
+}
 
 Collections.deleteWord = (req, db, cbk) => {
   db.Collections.findOneAndUpdate({"email": req.body.email}, {$pull: {characters: {$each: [{"id": req.character.id}]}}}, (err, res) => {

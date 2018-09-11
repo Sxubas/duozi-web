@@ -24,7 +24,7 @@ Tools.recognizeCharacters = (req, res) => {
     method: 'post',
     url: 'https://api.ocr.space/parse/image',
     headers: newHeaders,
-    data: req.rawBody
+    data: req.body
   }).then( response => {
     res.send(JSON.stringify(response.data))
   }).catch( error => {
