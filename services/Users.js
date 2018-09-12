@@ -6,53 +6,79 @@
 
 const Users = {};
 
-Users.login = (req, db, cbk) => {
-  db.collection('users').findOne({"email": req.body.email}, (err, res) => {
-    if(err) cbk(false);
-    else cbk(res.password == req.body.password);
+Users.login = (req, res, db) => {
+  if(!req.get('email') || !req.get('password')) {
+    res.status(400);
+    res.send('Email and password required.');
+  }
+  db.collection('users').findOne({"email": req.header('email'), "password": req.header('password')}, (err, r) => {
+    if(err || !r) {
+      res.status(404);
+      res.send('Email or password wrong.');
+    }
+    else res.send(r);
   });
 };
 
-Users.signup = (req, db, cbk) => {
+Users.signup = (req, res, db) => {
   if(!req.body.email || !req.body.password) {
-    cbk(null);
+    res.status(400);
+    res.send('Email and password required.');
   }
   else {
-    db.collection('users').find({"email": req.body.email}, (err, res) => {
-      if(!err) {
-        cbk(null);
+    db.collection('users').findOne({"email": req.body.email}, (err, r) => {
+      if(!err && r) {
+        res.status(403);
+        res.send('There is already a user with the email provided.')
       }
       else {
         db.collection('users').insertOne({
-          email: req.body.email,
+          email: req.body.email,  
           password: req.body.password
         }, (err, r) => {
           if(err) {
-            cbk(null);
+            res.status(500);
+            res.send('An error ocurred during the operation.');
           }
-          cbk(r.ops[0]);
+          else {
+            res.send(r.ops[0]);
+          }
         });
       }
     });
   }
 };
 
-Users.update = (req, db, cbk) => {
+Users.update = (req, res, db) => {
   if(!req.body.email || !req.body.password) {
-    cbk(null);
+    res.status(400);
+    res.send('Email and password required.');
   }
-  db.collection('users').findOneAndUpdate({"email": req.body.email}, {$set: {"password": req.body.password}}, (err, res) => {
-    if(err) cbk(null);
-    else cbk(res.value);
-  })
+  else {
+    db.collection('users').findOneAndUpdate({"email": req.body.email}, {$set: {"password": req.body.password}}, (err, r) => {
+      if(err || !r.value) {
+        res.status(404);
+        res.send('User not found.');
+      }
+      else res.send(r.value);
+    })
+  }
 };
 
-Users.delete = (req, db, cbk) => {
-  if(!req.body.email) cbk(false);
-  db.collection('users').findOneAndDelete({"email": req.body.email}, (err, res) => {
-    if(err) cbk(false);
-    else cbk(true);
-  })
+Users.delete = (req, res, db) => {
+  if(!req.body.email) {
+    res.status(400);
+    res.send('Email required.');
+  }
+  else {
+    db.collection('users').findOneAndDelete({"email": req.body.email}, (err, r) => {
+      if(err || !r.value) {
+        res.status(404);
+        res.send('User not found.');
+      }
+      else res.send('User removed successfully.');
+    })
+  }
 };
 
 //Export as a file, in order to call it like: Users.[function]

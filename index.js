@@ -51,17 +51,25 @@ const expressSetup = (mongoClient) => {
     res.json({ 'message': 'Server running!' });
   });
 
-  app.post('/users', (req, res) => {
-    const cbk = function(obj) {
-      if(obj) res.send(obj);
-      else {
-        res.status(500)
-        res.send('error')
-      }
-    }
-    console.log(req.body);
-    Users.signup(req, db, cbk);
+  //CRUD Users
+  app.get('/users', (req, res) => {
+    Users.login(req, res, db)
   });
+
+  app.post('/users', (req, res) => {
+    Users.signup(req, res, db);
+  });
+
+  app.put('/users', (req, res) => {
+    Users.update(req, res, db);
+  });
+
+  app.delete('/users', (req, res) => {
+    Users.delete(req, res, db);
+  });
+
+  //CRUD Collections
+  
 
   //Si necesita el mongo porfa use algo mas parecido a esto pls:
   app.get('/ejemplo', (req, res) => {
