@@ -69,7 +69,17 @@ const expressSetup = (mongoClient) => {
   });
 
   //CRUD Collections
-  
+  app.get('/collections', (req, res) => {
+    Collections.getAllwords(req, res, db);
+  });
+
+  app.post('/collections', (req, res) => {
+    Collections.addWord(req, res, db);
+  });
+
+  app.delete('/collections', (req, res) => {
+    Collections.deleteWord(req, res, db);
+  });
 
   //Si necesita el mongo porfa use algo mas parecido a esto pls:
   app.get('/ejemplo', (req, res) => {
