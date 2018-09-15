@@ -76,14 +76,4 @@ Collections.deleteWord = (req, res, db) => {
   });
 };
 
-//Retrieves words whose character or pinyin matches to the search string
-Collections.search = () => {
-
-};
-
-//Retirieves words whose categories include at least one of the parameter categories
-Collections.filterByCategory = () => {
-
-};
-
 module.exports = Collections;

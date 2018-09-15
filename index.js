@@ -7,6 +7,7 @@ const MongoClient = require('mongodb');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const path = require('path');
 
 //
 //Main entry point. Responsible of setting express app, mongoDB connections 
@@ -44,10 +45,6 @@ const mongoSetup = (callback) => {
 const expressSetup = (mongoClient) => {
 
   const db = mongoClient.db('duozi');
-  
-  app.get('/', (req, res) => {
-    res.json({ 'message': 'Server running!' });
-  });
 
   //CRUD Users
   app.get('/users', (req, res) => {
@@ -84,11 +81,18 @@ const expressSetup = (mongoClient) => {
   });
 
   //Tools API
-  app.post('/tools/recognize', Tools.recognizeCharacters);
-  
+  app.post('/tools/recognize', Tools.recognizeCharacters);  
   app.get('/tools/hanziToPinyin', Tools.hanziToPinyin);
   app.get('/tools/pinyinToHanzi', Tools.pinyinToHanzi);
   app.get('/tools/librarySearch', Tools.dictionarySearch);
+
+  //Serving react resources
+  app.use(express.static(path.join(__dirname, 'frontend/build')));
+
+  //For any request that does not match any other endpoint, return app
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname+'/frontend/build/index.html'));
+  });
 
   startServer();
 };
