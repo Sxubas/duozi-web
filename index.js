@@ -75,6 +75,10 @@ const expressSetup = (mongoClient) => {
     Collections.addWord(req, res, db);
   });
 
+  app.put('/collections', (req, res) => {
+    Collections.modifyWord(req, res, db);
+  });
+
   app.delete('/collections', (req, res) => {
     Collections.deleteWord(req, res, db);
   });
