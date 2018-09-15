@@ -38,7 +38,17 @@ Tools.recognizeCharacters = (req, res) => {
 //searching for 'ren' should include '人，忍， 认, ...' as their pinyin corresponds to ren
 //searching for '乐' should include 'yuè' and 'lè' as they are '乐's pinyin 
 Tools.dictionarySearch = (req, res) => {
-
+  const search = req.query.search;
+  if(search){
+    res.send(Cedict.librarySearch(search));
+  }
+  else {
+    res.status(400);
+    res.send({
+      error: true,
+      message: 'Missing or empty search'
+    });
+  }
 };
 
 Tools.hanziToPinyin = (req, res) => {

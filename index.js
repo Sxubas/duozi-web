@@ -83,7 +83,8 @@ const expressSetup = (mongoClient) => {
   app.post('/tools/recognize', Tools.recognizeCharacters);
   
   app.get('/tools/hanziToPinyin', Tools.hanziToPinyin);
-  app.get('/tools/pinyinToHanzi/', Tools.pinyinToHanzi);
+  app.get('/tools/pinyinToHanzi', Tools.pinyinToHanzi);
+  app.get('/tools/librarySearch', Tools.dictionarySearch);
 
   startServer();
 };

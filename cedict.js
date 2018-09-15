@@ -1,5 +1,5 @@
 const fs = require('fs');
-const NOT_FOUND = {error: true, message: 'not found'};
+const NOT_FOUND = { error: true, message: 'not found' };
 let Cedict = {};
 
 
@@ -106,14 +106,13 @@ Cedict.findPinyin = (hanzi) => {
   else if (Cedict.unique_pinyin[hanzi]) return [Cedict.unique_pinyin[hanzi]];
   else if (Cedict.multi_pinyin[hanzi]) return Cedict.multi_pinyin[hanzi];
   else return NOT_FOUND;
-
 };
 
 Cedict.findHanzi = pinyin => {
   //Empty/undefined search
   if (!pinyin) return NOT_FOUND;
   //If last character is a number
-  else if ( !isNaN(parseInt(pinyin[pinyin.length - 1])) ) {
+  else if (!isNaN(parseInt(pinyin[pinyin.length - 1]))) {
     //Return expected hanzi
     const simplifiedPinyin = pinyin.substring(0, pinyin.length - 1);
     if (Cedict.pinyin[simplifiedPinyin]) {
@@ -124,14 +123,44 @@ Cedict.findHanzi = pinyin => {
     }
   }
   else {
-    if(Cedict.pinyin[pinyin]){
+    if (Cedict.pinyin[pinyin]) {
       return Cedict.pinyin[pinyin];
     }
-    else{
+    else {
       return NOT_FOUND;
     }
-    
   }
+};
+
+Cedict.librarySearch = search => {
+  const rawData = Cedict.library.filter(entry => entry.toLowerCase().includes(search.toLowerCase()));
+  const cleanData = [];
+
+  for (const result of rawData) {
+    const data = result.split(' ');
+    const traditional = data[0];
+    const simplified = data[1];
+    const pinyin = result.split('[')[1].split(']')[0];
+    let rawMeanings = result.split('/');
+    const meanings = [];
+
+    //Only consider 3-or-less character long expressions (to reduce search results)
+    if (simplified.length <= 3) {
+      //Start from 1 to exlcude non-meaning data, end in length - 1 to exclude empty def
+      for (let i = 1; i < rawMeanings.length - 1; i++) {
+        meanings.push(rawMeanings[i]);
+      }
+
+      cleanData.push({
+        traditional,
+        simplified,
+        pinyin,
+        meanings
+      });
+    }
+  }
+
+  return cleanData;
 };
 
 module.exports = Cedict;
