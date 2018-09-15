@@ -1,5 +1,6 @@
 
 const axios = require('axios');
+const Cedict = require('./../cedict.js');
 //
 // Set of functions responsible of providing special functionalities
 // In charge of API communication and special IO features
@@ -25,9 +26,9 @@ Tools.recognizeCharacters = (req, res) => {
     url: 'https://api.ocr.space/parse/image',
     headers: newHeaders,
     data: req.body
-  }).then( response => {
+  }).then(response => {
     res.send(JSON.stringify(response.data));
-  }).catch( error => {
+  }).catch(error => {
     console.log(error);
     res.send(JSON.stringify(error));
   });
@@ -36,8 +37,46 @@ Tools.recognizeCharacters = (req, res) => {
 //Examples: 
 //searching for 'ren' should include '人，忍， 认, ...' as their pinyin corresponds to ren
 //searching for '乐' should include 'yuè' and 'lè' as they are '乐's pinyin 
-Tools.dictionarySearch = () => {
+Tools.dictionarySearch = (req, res) => {
 
+};
+
+Tools.hanziToPinyin = (req, res) => {
+  const hanzi = req.query.hanzi;
+
+  if (hanzi) {
+    const pinyinCandiates = Cedict.findPinyin(hanzi);
+    if(pinyinCandiates.error){
+      res.status(404);
+    }
+    res.send(pinyinCandiates);
+  }
+  else {
+    res.status(400);
+    res.send({
+      error: true,
+      message: 'Missing hanzi'
+    });
+  }
+};
+
+Tools.pinyinToHanzi = (req, res) => {
+  const pinyin = req.query.pinyin;
+
+  if (pinyin) {
+    const hanziCandidates = Cedict.findHanzi(pinyin);
+    if(hanziCandidates.error){
+      res.status(404);
+    }
+    res.send(hanziCandidates);
+  }
+  else {
+    res.status(400);
+    res.send({
+      error: true,
+      message: 'Missing pinyin'
+    });
+  }
 };
 
 module.exports = Tools;

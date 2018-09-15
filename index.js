@@ -32,7 +32,7 @@ const mongoSetup = (callback) => {
   const uri = `mongodb://ja-manrique:${password}@duozi-web-shard-00-00-072t6.mongodb.net:27017,duozi-web-shard-00-01-072t6.mongodb.net:27017,duozi-web-shard-00-02-072t6.mongodb.net:27017/test?ssl=true&replicaSet=Duozi-web-shard-0&authSource=admin&retryWrites=true`;
 
   //Connect to mongo cloud
-  MongoClient.connect(uri, function (err, client) {
+  MongoClient.connect(uri, {useNewUrlParser: true}, function (err, client) {
     if (err) throw err;
     else console.log('Successfully connected to mongoDB');
     //Afterwards instruction, client stands for a mongoClient connected to mongoAtlas instance
@@ -79,14 +79,11 @@ const expressSetup = (mongoClient) => {
     Collections.deleteWord(req, res, db);
   });
 
-  //Si necesita el mongo porfa use algo mas parecido a esto pls:
-  app.get('/ejemplo', (req, res) => {
-    Collections.getAllwords(req, res, mongoClient); 
-  });
-  //Así no nos llenamos tanto de cbk(null) o con parametros raros por ahí volando
-
+  //Tools API
   app.post('/tools/recognize', Tools.recognizeCharacters);
-  app.put('/test', Collections.modifyWord);
+  
+  app.get('/tools/hanziToPinyin', Tools.hanziToPinyin);
+  app.get('/tools/pinyinToHanzi/', Tools.pinyinToHanzi);
 
   startServer();
 };
