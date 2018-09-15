@@ -61,7 +61,7 @@ Users.update = (req, res, db) => {
         res.send('User not found.');
       }
       else res.send(r.value);
-    })
+    });
   }
 };
 
@@ -77,7 +77,7 @@ Users.delete = (req, res, db) => {
         res.send('User not found.');
       }
       else res.send('User removed successfully.');
-    })
+    });
   }
 };
 
