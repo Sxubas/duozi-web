@@ -11,7 +11,7 @@ Users.login = (req, res, db) => {
     res.status(400);
     res.send('Email and password required.');
   }
-  db.collection('users').findOne({"email": req.header('email'), "password": req.header('password')}, (err, r) => {
+  db.collection('users').findOne({'email': req.header('email'), 'password': req.header('password')}, (err, r) => {
     if(err || !r) {
       res.status(404);
       res.send('Email or password wrong.');
@@ -26,10 +26,10 @@ Users.signup = (req, res, db) => {
     res.send('Email and password required.');
   }
   else {
-    db.collection('users').findOne({"email": req.body.email}, (err, r) => {
+    db.collection('users').findOne({'email': req.body.email}, (err, r) => {
       if(!err && r) {
         res.status(403);
-        res.send('There is already a user with the email provided.')
+        res.send('There is already a user with the email provided.');
       }
       else {
         db.collection('users').insertOne({
@@ -55,7 +55,7 @@ Users.update = (req, res, db) => {
     res.send('Email and password required.');
   }
   else {
-    db.collection('users').findOneAndUpdate({"email": req.body.email}, {$set: {"password": req.body.password}}, (err, r) => {
+    db.collection('users').findOneAndUpdate({'email': req.body.email}, {$set: {'password': req.body.password}}, (err, r) => {
       if(err || !r.value) {
         res.status(404);
         res.send('User not found.');
@@ -71,7 +71,7 @@ Users.delete = (req, res, db) => {
     res.send('Email required.');
   }
   else {
-    db.collection('users').findOneAndDelete({"email": req.body.email}, (err, r) => {
+    db.collection('users').findOneAndDelete({'email': req.body.email}, (err, r) => {
       if(err || !r.value) {
         res.status(404);
         res.send('User not found.');

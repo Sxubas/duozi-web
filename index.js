@@ -6,8 +6,6 @@ const Tools = require('./services/Tools');
 const MongoClient = require('mongodb');
 const express = require('express');
 const bodyParser = require('body-parser');
-const multer = require('multer');
-const upload = multer({ storage: multer.memoryStorage()});
 const cors = require('cors');
 
 //
@@ -29,7 +27,7 @@ app.use(cors());
 const mongoSetup = (callback) => {
   const password = process.env.WEB_DEV_MONGODB_PASSWORD;
 
-  if (!password) throw new Error("Could not find password")
+  if (!password) throw new Error('Could not find password');
 
   const uri = `mongodb://ja-manrique:${password}@duozi-web-shard-00-00-072t6.mongodb.net:27017,duozi-web-shard-00-01-072t6.mongodb.net:27017,duozi-web-shard-00-02-072t6.mongodb.net:27017/test?ssl=true&replicaSet=Duozi-web-shard-0&authSource=admin&retryWrites=true`;
 
@@ -40,7 +38,7 @@ const mongoSetup = (callback) => {
     //Afterwards instruction, client stands for a mongoClient connected to mongoAtlas instance
     callback(client);
   });
-}
+};
 
 //Setting up endpoints
 const expressSetup = (mongoClient) => {
@@ -53,7 +51,7 @@ const expressSetup = (mongoClient) => {
 
   //CRUD Users
   app.get('/users', (req, res) => {
-    Users.login(req, res, db)
+    Users.login(req, res, db);
   });
 
   app.post('/users', (req, res) => {
@@ -91,13 +89,13 @@ const expressSetup = (mongoClient) => {
   app.put('/test', Collections.modifyWord);
 
   startServer();
-}
+};
 
 //Begin listening to requests
 const startServer = () => {
   app.listen(8080, () => {
-    console.log("Server successfully run");
+    console.log('Server successfully run');
   });
-}
+};
 
 mongoSetup(expressSetup);

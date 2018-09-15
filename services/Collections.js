@@ -8,10 +8,10 @@ const Collections = {};
 //Retrieves all words from a users collection, ordered by time added to the collection
 Collections.getAllwords = (req, res, db) => {
   db.collection('collections').findOne({"email": req.header('email')}, (err, r) => {
-    if(err) res.send(err)
+    if(err) res.send(err);
     else if(!r) res.send([]);
     else res.send(r.characters);
-  })
+  });
 };
 
 Collections.addWord = (req, res, db) => {

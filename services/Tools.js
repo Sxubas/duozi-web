@@ -5,7 +5,7 @@ const axios = require('axios');
 // In charge of API communication and special IO features
 //
 
-const apikey = process.env.FREE_OCR_API_KEY
+const apikey = process.env.FREE_OCR_API_KEY;
 
 if (!apikey) throw new Error('OCR Apikey variable not set');
 
@@ -26,18 +26,18 @@ Tools.recognizeCharacters = (req, res) => {
     headers: newHeaders,
     data: req.body
   }).then( response => {
-    res.send(JSON.stringify(response.data))
+    res.send(JSON.stringify(response.data));
   }).catch( error => {
     console.log(error);
-    res.send(JSON.stringify(error))
+    res.send(JSON.stringify(error));
   });
-}
+};
 //Given an string, the function returns suggested characters or pinyin using CCEDICT
 //Examples: 
 //searching for 'ren' should include '人，忍， 认, ...' as their pinyin corresponds to ren
 //searching for '乐' should include 'yuè' and 'lè' as they are '乐's pinyin 
 Tools.dictionarySearch = () => {
 
-}
+};
 
 module.exports = Tools;
