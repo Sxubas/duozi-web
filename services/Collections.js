@@ -1,3 +1,4 @@
+const ObjectID = require('mongodb').ObjectID;
 //
 // Set of functions responsible of managing word collections logic for each user
 // In charge of CRUD operations and custom queries over mongoDB
@@ -19,7 +20,7 @@ Collections.addWord = (req, res, db) => {
     if(err) res.send(err);
     else if(r) {
       db.collection('collections').findOneAndUpdate({'email': req.body.email}, {$push: {characters: {
-        'id': req.body.id,
+        '_id': new ObjectID(),
         'dateCreated': Date.now(),
         'simplified': req.body.simplified,
         'traditional': req.body.traditional,
@@ -33,7 +34,7 @@ Collections.addWord = (req, res, db) => {
     }
     else {
       db.collection('collections').insertOne({'email': req.body.email, characters: [{
-        'id': req.body.id,
+        'id': new ObjectID(),
         'dateCreated': Date.now(),
         'simplified': req.body.simplified,
         'traditional': req.body.traditional,

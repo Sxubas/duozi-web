@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Login from './components/Login/Login';
-import Duozi from './components/Duozi/Home/Home';
+import Duozi from './components/Duozi/Router';
 import './App.css';
 
 class App extends Component {
