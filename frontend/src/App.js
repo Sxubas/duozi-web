@@ -8,7 +8,8 @@ class App extends Component {
   constructor(){
     super();
     this.state = {
-      loggedIn: false
+      loggedIn: false,
+      email: ''
     };
   }
 
@@ -16,7 +17,7 @@ class App extends Component {
     return(
       <Login 
         onLogin={result => {
-          this.setState({loggedIn: result});
+          this.setState({loggedIn: true, email: result});
         }}
       />
     );
@@ -24,7 +25,7 @@ class App extends Component {
 
   renderApp() {
     return(
-      <Duozi />
+      <Duozi email={this.state.email}/>
     );
   }
 

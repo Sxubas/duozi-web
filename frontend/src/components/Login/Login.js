@@ -27,7 +27,7 @@ class Login extends Component {
     })
       .then((response) => {
         if (response.status === 200) {
-          response.json().then((json) => {console.log(json); this.props.onLogin(true);}); //the onLogin method should receive the email to storage the info of the session.
+          response.json().then((json) => {this.props.onLogin(json.email);}); //the onLogin method should receive the email to storage the info of the session.
         }
       })
       .catch(err => console.log(err));
