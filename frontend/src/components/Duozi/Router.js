@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Collection from './Collection/Collection';
 import Tools from './Tools/Tools';
 import Home from './Home/Home';
+import './Router.css';
 
 //'Root' App component which is in charge of routing to different components
 class Router extends Component {
@@ -62,8 +63,10 @@ class Router extends Component {
       /* this header will allways be shown in the app */
       <div className='router-container'>
         <div className='header-container'>
-          <h1>Duozi</h1>
-          <h2>Learning mandarin, made easier</h2>
+          <div>
+            <h1>Duozi</h1>
+            <h2>Toolbox for chinese learners</h2>
+          </div>
         </div>
         <hr className='home-hr' />
         <div className='route-container'>
