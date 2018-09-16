@@ -43,6 +43,14 @@ class Tools extends Component {
   render() {
     const tool = this.props.routeParams.tool;
     const searchLabel = tool === 'h2p' ? 'Hanzi' : 'Pinyin';
+    const buttonBack = (
+      <div>
+        <button onClick={() => this.props.navigate('home', {})}>
+          <i className='material-icons'>arrow_back</i>
+        </button>
+        <label>Home</label>
+      </div>
+    );
     const searchBar = (
       <div id='search'>
         <span>insert {searchLabel} here</span>
@@ -95,7 +103,7 @@ class Tools extends Component {
         //
       }
     }
-    return (tool === 'h2p' || tool === 'p2h'? (<div>{searchBar}{result}</div>) : (
+    return (tool !== 'ocr'? (<div>{buttonBack}<br />{searchBar}{result}</div>) : (
       <div>
         Currently in: tools {this.props.routeParams ? 'with params: ' + JSON.stringify(this.props.routeParams) : 'with no params'}
       </div>)
