@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+//Component to render a basic word visualization
 class CollectionWord extends Component {
 
   render() {
