@@ -9,12 +9,12 @@ const Users = {};
 Users.login = (req, res, db) => {
   if(!req.get('email') || !req.get('password')) {
     res.status(400);
-    res.send('Email and password required.');
+    res.send({msg: 'Email and password required.'});
   }
   db.collection('users').findOne({'email': req.header('email'), 'password': req.header('password')}, (err, r) => {
     if(err || !r) {
       res.status(404);
-      res.send('Email or password wrong.');
+      res.send({msg:'Email or password wrong.'});
     }
     else res.send(r);
   });
