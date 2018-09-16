@@ -21,7 +21,8 @@ class Tools extends Component {
       if(text !== '') {
         fetch('/tools/hanziToPinyin?hanzi='+text)
           .then(res => res.json())
-          .then(json => this.setState({result: json}));
+          .then(json => this.setState({result: json}))
+          .catch(err => console.log(err));
       }
     }
     else if(this.props.routeParams.tool === 'p2h') {
@@ -29,20 +30,27 @@ class Tools extends Component {
       if(text !== '') {
         fetch('/tools/pinyinToHanzi?pinyin='+text)
           .then(res => res.json())
-          .then(json => this.setState({result: json}));
+          .then(json => this.setState({result: json}))
+          .catch(err => console.log(err));
       }
     }
     else if(this.props.routeParams.tool === 'ocr') {
       //
     }
     else {
-      //const text = this.state.text;
+      const text = this.state.text;
+      if(text !== '') {
+        fetch('/tools/librarySearch?search='+text)
+          .then(res => res.json())
+          .then(json => this.setState({result: json}))
+          .catch(err => console.log(err));
+      }
     }
   }
 
   render() {
     const tool = this.props.routeParams.tool;
-    const searchLabel = tool === 'h2p' ? 'Hanzi' : 'Pinyin';
+    const searchLabel = 'Insert '+(tool === 'h2p' ? 'Hanzi' : (tool==='p2h' ? 'Pinyin' : 'meaning'))+' to search';
     const buttonBack = (
       <div>
         <button onClick={() => this.props.navigate('home', {})}>
@@ -53,7 +61,7 @@ class Tools extends Component {
     );
     const searchBar = (
       <div id='search'>
-        <span>insert {searchLabel} here</span>
+        <span>{searchLabel}</span>
         <div id='searchBar'>
           <input type='text'
             value={this.state.text}
@@ -100,7 +108,27 @@ class Tools extends Component {
         //
       }
       else {
-        //
+        const list = this.state.result.map((r, i) => {
+          const meanings = r.meanings.map((m, i) => {
+            return (<p key={i}><i>{m}</i></p>);
+          });
+          return (
+            <div key={i}>
+              <p>Simplified hanzi: {r.simplified}</p>
+              <p>Traditional hanzi: {r.traditional}</p>
+              <p>Pinyin: {r.pinyin}</p>
+              <p>Meanings:</p>
+              {meanings}
+              <br/>
+            </div>
+          );
+        });
+        result = (
+          <div>
+            <h3>Results:</h3>
+            {list}
+          </div>
+        );
       }
     }
     return (tool !== 'ocr'? (<div>{buttonBack}<br />{searchBar}{result}</div>) : (
