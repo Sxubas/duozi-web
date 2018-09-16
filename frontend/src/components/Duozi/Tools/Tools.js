@@ -6,9 +6,13 @@ class Tools extends Component {
     super(props);
     this.state = {
       text: '',
-      inputImage: null,
+      selectedFile: null,
       result: null
     };
+  }
+
+  fileSelectedHandler(e) {
+    this.setState({selectedFile: e.target.files[0]});
   }
 
   handleChangeText(e) {
@@ -35,7 +39,20 @@ class Tools extends Component {
       }
     }
     else if(this.props.routeParams.tool === 'ocr') {
-      //
+      this.setState({result: null});
+      const formData = new FormData();
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(this.state.selectedFile);
+      fileReader.onload = () => {
+        formData.append('language', 'cht');
+        formData.append('base64image', fileReader.result);
+        fetch('http://localhost:8080/tools/recognize', {
+          method: 'POST',
+          body: formData
+        }).then( response => response.json())
+          .then( json => this.setState({result: json}))
+          .catch(err => console.log(err));
+      };
     }
     else {
       const text = this.state.text;
@@ -69,6 +86,12 @@ class Tools extends Component {
           />
           <button onClick={() => this.ComponentDidMount()}>Search</button>
         </div>
+      </div>
+    );
+    const uploadFiles = (
+      <div className='uploadFiles'>
+        <input type='file' onChange={this.fileSelectedHandler.bind(this)}/>
+        <button onClick={() => this.ComponentDidMount()}>Upload</button>
       </div>
     );
     let result = null;
@@ -105,7 +128,13 @@ class Tools extends Component {
         );
       }
       else if(tool==='ocr') {
-        //
+        const pr = this.state.result.ParsedResults[0];
+        result = pr.FileParseExitCode === 1 ? (
+          <div id='parsedResult'>
+            <h3>Parsed text:</h3>
+            <span>{pr.ParsedText}</span>
+          </div>
+        ) : pr.ErrorMessage;
       }
       else {
         const list = this.state.result.map((r, i) => {
@@ -131,11 +160,8 @@ class Tools extends Component {
         );
       }
     }
-    return (tool !== 'ocr'? (<div>{buttonBack}<br />{searchBar}{result}</div>) : (
-      <div>
-        Currently in: tools {this.props.routeParams ? 'with params: ' + JSON.stringify(this.props.routeParams) : 'with no params'}
-      </div>)
-    );
+    const toolElement = (tool==='ocr' ? uploadFiles : searchBar);
+    return (<div>{buttonBack}<br/>{toolElement}{result}</div>);
   }
 }
 
