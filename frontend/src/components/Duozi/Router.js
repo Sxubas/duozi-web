@@ -4,19 +4,22 @@ import Collection from './Collection/Collection';
 import Tools from './Tools/Tools';
 import Home from './Home/Home';
 
+//'Root' App component which is in charge of routing to different components
 class Router extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       route: 'home',
-      routeParams: {}
+      routeParams: undefined
     };
   }
 
   renderRoute() {
     const route = this.state.route;
 
+    //Function passed to every route, to modify app's route
+    //routeParams depends on destinantion route
     const navigate = (route, routeParams) => {
       this.setState({ route: route , routeParams: routeParams});
     };
@@ -56,6 +59,7 @@ class Router extends Component {
 
   render() {
     return (
+      /* this header will allways be shown in the app */
       <div className='router-container'>
         <div className='header-container'>
           <h1>Duozi</h1>

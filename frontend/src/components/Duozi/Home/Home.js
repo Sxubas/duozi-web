@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CollectionWord from './../Collection/CollectionWord';
 
+//Renders home View
 class Home extends Component {
 
   constructor(props) {
@@ -12,11 +13,12 @@ class Home extends Component {
     };
   }
 
+  //Fetches data from backend
   componentWillMount() {
     fetch('/collections', {
       method: 'GET',
       headers: {
-        email: 'se.cardenas@uniandes'/* this.props.email */
+        email: this.props.email
       }
     }).then(resp => resp.json()).then(json => {
       const collection = json;
@@ -27,6 +29,7 @@ class Home extends Component {
     });
   }
 
+  //Limits shown words to 5, returns JSX list to render
   renderRecentWords() {
     const recent = [];
 
@@ -70,10 +73,13 @@ class Home extends Component {
             </button>
           </div>
         </div>
+
         <div className='vertical-hr'></div>
+
         <div className='tools-container'>
           <h3>Tools</h3>
           <div>
+
             <span>
               <button onClick={() => this.props.navigate('tools', {tool : 'h2p'})}>
                 <i className='material-icons'>translate</i>
