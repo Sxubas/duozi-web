@@ -46,6 +46,7 @@ class Home extends Component {
           word={word}
           mode={this.state.hanziMode}
           key={word.simplified}
+          isPreview={true}
         />
       )
     );

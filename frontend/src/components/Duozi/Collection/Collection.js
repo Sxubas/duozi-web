@@ -31,6 +31,7 @@ class Collection extends Component {
 
     this.sendForm = this.sendForm.bind(this);
     this.sendEdit = this.sendEdit.bind(this);
+    this.sendDelete = this.sendDelete.bind(this);
   }
 
   //Fetches data from backend and sets state from route params
@@ -134,7 +135,26 @@ class Collection extends Component {
       },
       body: JSON.stringify(formData)
     }).then(resp => resp.json()).then(json => {
-      this.state.collection.push(this.state.editedWord);
+      this.componentWillMount();
+      this.setState({
+        editedWord: { simplified: '', traditional: '', pinyins: [''] },
+        editingWord: false
+      });
+    });
+  }
+
+  sendDelete(){
+    let formData = this.state.editedWord;
+    formData.email = this.props.email;
+
+    fetch('/collections', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    }).then(resp => resp.json()).then(json => {
+      this.componentWillMount();
       this.setState({
         editedWord: { simplified: '', traditional: '', pinyins: [''] },
         editingWord: false
@@ -164,7 +184,10 @@ class Collection extends Component {
           )}
           <div onClick={() => this.state.editedWord.pinyins.push('')} className='collection-top-form-add-tooltip'><i className='material-icons'>add</i>Add another pinyin</div>
         </label>
-        <button onClick={this.sendEdit}>Save changes</button>
+        <div className='collection-delete-form-buttons'>
+          <button onClick={this.sendEdit}>Save changes</button>
+          <button onClick={this.sendDelete}>Delete word</button>
+        </div>
         <button onClick={() => this.setState({ editingWord: false })}>Cancel</button>
       </div>
     );
