@@ -48,7 +48,7 @@ class Tools extends Component {
       fileReader.onload = () => {
         formData.append('language', 'cht');
         formData.append('base64image', fileReader.result);
-        fetch('http://localhost:8080/tools/recognize', {
+        fetch('/tools/recognize', {
           method: 'POST',
           body: formData
         }).then( response => response.json())
