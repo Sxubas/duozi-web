@@ -90,7 +90,8 @@ class Collection extends Component {
     }).then(resp => resp.json()).then(json => {
       this.state.collection.push(this.state.newWord);
       this.setState({
-        newWord: { simplified: '', traditional: '', pinyins: [''] }
+        newWord: { simplified: '', traditional: '', pinyins: [''] },
+        addingWord: false
       });
     });
 
@@ -153,7 +154,7 @@ class Collection extends Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(formData)
-    }).then(resp => resp.json()).then(json => {
+    }).then(resp => {
       this.componentWillMount();
       this.setState({
         editedWord: { simplified: '', traditional: '', pinyins: [''] },
@@ -195,7 +196,18 @@ class Collection extends Component {
 
 
   renderCharacters() {
-    return this.state.collection.map(word =>
+    return this.state.collection.filter(word => {
+      let inPinyin = false;
+      for(const piny of word.pinyins){
+        if(piny.toLowerCase().includes(this.state.search.toLowerCase())){
+          inPinyin = true;
+          break;
+        }
+      }
+      const inHanzi = word.simplified.includes(this.state.search) || word.traditional.includes(this.state.search);
+
+      return inHanzi || inPinyin;
+    }).map(word =>
       <CollectionWord
         word={word}
         key={word._id}
