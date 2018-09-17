@@ -14,9 +14,9 @@ class Collection extends Component {
       newWord: {
         simplified: '',
         traditional: '',
-        pinyins: [
-          ''
-        ]
+        pinyins: [''],
+        def: '',
+        categories: []
       },
       editingWord: false,
       editedWord: {
@@ -60,14 +60,30 @@ class Collection extends Component {
     this.setState({ newWord: this.state.newWord });
   }
 
+  deleteCategory(index){
+    this.state.newWord.categories.splice(index, 1);
+    this.setState({ newWord: this.state.newWord });
+  }
+
   addPinyin() {
     this.state.newWord.pinyins.push('');
+    this.setState({ newWord: this.state.newWord });
+  }
+
+  addCategory(){
+    this.state.newWord.categories.push('');
     this.setState({ newWord: this.state.newWord });
   }
 
   modifyAddPinyin(i, event) {
     const replaceWord = this.state.newWord;
     replaceWord.pinyins[i] = event.target.value;
+    this.setState({ newWord: replaceWord });
+  }
+
+  modifyCategory(i, event){
+    const replaceWord = this.state.newWord;
+    replaceWord.categories[i] = event.target.value;
     this.setState({ newWord: replaceWord });
   }
 
@@ -104,10 +120,12 @@ class Collection extends Component {
           Simplified hanzi:
           <input onInput={event => this.setState({ newWord: { ...this.state.newWord, simplified: event.target.value } })} value={this.state.newWord.simplified} type="text" />
         </label>
+
         <label>
           Traditional hanzi:
           <input onInput={event => this.setState({ newWord: { ...this.state.newWord, traditional: event.target.value } })} value={this.state.newWord.traditional} type="text" />
         </label>
+
         <label className='collection-top-form-pinyin'>
           Pinyin:
           {this.state.newWord.pinyins.map((pinyin, i) =>
@@ -119,6 +137,23 @@ class Collection extends Component {
           )}
           <div onClick={() => this.addPinyin()} className='collection-top-form-add-tooltip'><i className='material-icons'>add</i>Add another pinyin</div>
         </label>
+
+        <label>
+          Definition:
+          <input onInput={event => this.setState({ newWord: { ...this.state.newWord, def: event.target.value } })} value={this.state.newWord.def} type="text" />
+        </label>
+
+        <label className='collection-top-form-pinyin'>
+          Categories:
+          {this.state.newWord.categories.map((pinyin, i) =>
+            <div key={i}>
+              <input onInput={event => this.modifyCategory(i, event)} value={this.state.newWord.categories[i]} />
+              <i onClick={() => this.deleteCategory(i)} className="material-icons">remove</i>
+            </div>
+          )}
+          <div onClick={() => this.addCategory()} className='collection-top-form-add-tooltip'><i className='material-icons'>add</i>Add another category</div>
+        </label>
+
         <button onClick={this.sendForm}>Add word</button>
         <button onClick={() => this.setState({ addingWord: false })}>Cancel</button>
       </div>
@@ -197,6 +232,7 @@ class Collection extends Component {
 
   renderCharacters() {
     return this.state.collection.filter(word => {
+
       let inPinyin = false;
       for(const piny of word.pinyins){
         if(piny.toLowerCase().includes(this.state.search.toLowerCase())){
@@ -204,9 +240,19 @@ class Collection extends Component {
           break;
         }
       }
-      const inHanzi = word.simplified.includes(this.state.search) || word.traditional.includes(this.state.search);
 
-      return inHanzi || inPinyin;
+      let inCategories = false;
+      for(const cat of word.categories){
+        if(cat.toLowerCase().includes(this.state.search.toLowerCase())){
+          inCategories = true;
+          break;
+        }
+      }
+
+      const inHanzi = word.simplified.includes(this.state.search) || word.traditional.includes(this.state.search);
+      const inDef = word.def.toLowerCase().includes(this.state.search.toLowerCase());
+
+      return inHanzi || inPinyin || inDef || inCategories;
     }).map(word =>
       <CollectionWord
         word={word}

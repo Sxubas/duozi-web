@@ -167,3 +167,8 @@
 .collection-word-container strong{
   font-size: 2.6rem;
 }
+
+.definition{
+  color: rgb(209, 209, 209);
+  font-size: 0.8rem;
+}
