@@ -6,7 +6,8 @@ class Login extends Component {
     super(props);
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      singUp: false
     };
   }
 
@@ -18,7 +19,26 @@ class Login extends Component {
     this.setState({password: e.target.value});
   }
 
-  ComponentDidMount() {
+  handleRegister() {
+    fetch('/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: this.state.email,
+        password: this.state.password
+      })
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          response.json().then((json) => this.props.onLogin(json.email));
+        }
+      })
+      .catch(err => console.log(err));
+  }
+
+  handleLogin() {
     fetch('/users', {
       headers: {
         'email': this.state.email,
@@ -34,16 +54,20 @@ class Login extends Component {
   }
 
   tryLogin() {
-    //TODO implement login method
-    this.ComponentDidMount();
+    if(this.state.singUp) this.handleRegister();
+    else this.handleLogin();
     this.setState({email: '', password: ''});
-    
   }
 
   render() {
+    const title = this.state.singUp ? 'Sing Up' : 'Login';
+    const msg = this.state.singUp ? 'If you already have an account: ' : 'If you don\'t have an account yet: ';
+    const buttonMsg = this.state.singUp ? 'login' : 'sing up';
     return (
       <div className='login-container'>
+        <h1>Duozi</h1>
         <div className='login-modal-container'>
+          <h2>{title}</h2>
           <label>Email</label>
           <input type="text" placeholder="" value={this.state.email} onChange={this.handleChangeEmail.bind(this)}/>
       
@@ -51,6 +75,11 @@ class Login extends Component {
           <input type="password" value={this.state.password} onChange={this.handleChangePassword.bind(this)}/>
 
           <button className="login-button" onClick={this.tryLogin.bind(this)}>Log in</button>
+        </div>
+        <br/>
+        <div className='login-register-change-container'>
+          <span>{msg}</span>
+          <button onClick={() => this.setState({singUp: !this.state.singUp, email: '', password: ''})}>{buttonMsg}</button>
         </div>
       </div>
     );
