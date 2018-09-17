@@ -24,8 +24,9 @@ class Tools extends Component {
       const text = this.state.text;
       if(text !== '') {
         fetch('/tools/hanziToPinyin?hanzi='+text)
-          .then(res => res.json())
-          .then(json => this.setState({result: json}))
+          .then(res => {
+            if(res.status === 200 ) res.json().then(json => this.setState({result: json}));
+          })
           .catch(err => console.log(err));
       }
     }
@@ -33,8 +34,9 @@ class Tools extends Component {
       const text = this.state.text;
       if(text !== '') {
         fetch('/tools/pinyinToHanzi?pinyin='+text)
-          .then(res => res.json())
-          .then(json => this.setState({result: json}))
+          .then(res => {
+            if(res.status === 200 ) res.json().then(json => this.setState({result: json}));
+          })
           .catch(err => console.log(err));
       }
     }
@@ -58,8 +60,9 @@ class Tools extends Component {
       const text = this.state.text;
       if(text !== '') {
         fetch('/tools/librarySearch?search='+text)
-          .then(res => res.json())
-          .then(json => this.setState({result: json}))
+          .then(res => {
+            if(res.status === 200 ) res.json().then(json => this.setState({result: json}));
+          })
           .catch(err => console.log(err));
       }
     }
