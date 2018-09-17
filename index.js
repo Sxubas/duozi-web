@@ -99,7 +99,7 @@ const expressSetup = (mongoClient) => {
 
 //Begin listening to requests
 const startServer = () => {
-  app.listen(8080, () => {
+  app.listen(process.env.PORT || 8080, () => {
     console.log('Server successfully run');
   });
 };
