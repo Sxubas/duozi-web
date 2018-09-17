@@ -1,0 +1,26 @@
+.login-register-change-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+.login-modal-container {
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    width: fit-content;
+    padding: 1.2rem;
+    padding-top: 0.5rem;
+    background-color: whitesmoke;
+    border-radius: 6px;
+}
+
+.login-flex-container {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}

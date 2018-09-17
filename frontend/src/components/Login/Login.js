@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import './Login.css';
 
 class Login extends Component {
   constructor(props) {
@@ -60,26 +61,26 @@ class Login extends Component {
   }
 
   render() {
-    const title = this.state.singUp ? 'Sing Up' : 'Login';
+    const title = this.state.singUp ? 'Sign Up' : 'Login';
     const msg = this.state.singUp ? 'If you already have an account: ' : 'If you don\'t have an account yet: ';
-    const buttonMsg = this.state.singUp ? 'login' : 'sing up';
+    const buttonMsg = !this.state.singUp ? 'login' : 'sign up';
+    const buttonChangeMsg = this.state.singUp ? 'login' : 'sign up';
     return (
       <div className='login-container'>
         <h1>Duozi</h1>
-        <div className='login-modal-container'>
-          <h2>{title}</h2>
-          <label>Email</label>
-          <input type="text" placeholder="" value={this.state.email} onChange={this.handleChangeEmail.bind(this)}/>
-      
-          <label>Password</label>
-          <input type="password" value={this.state.password} onChange={this.handleChangePassword.bind(this)}/>
-
-          <button className="login-button" onClick={this.tryLogin.bind(this)}>Log in</button>
-        </div>
-        <br/>
-        <div className='login-register-change-container'>
-          <span>{msg}</span>
-          <button onClick={() => this.setState({singUp: !this.state.singUp, email: '', password: ''})}>{buttonMsg}</button>
+        <div className='login-flex-container'>
+          <div className='login-modal-container'>
+            <h2>{title}</h2>
+            <label>Email</label>
+            <input type="text" placeholder="" value={this.state.email} onChange={this.handleChangeEmail.bind(this)}/>
+            <label>Password</label>
+            <input type="password" value={this.state.password} onChange={this.handleChangePassword.bind(this)}/>
+            <button className="login-button" onClick={this.tryLogin.bind(this)}>{buttonMsg}</button>
+          </div>
+          <div className='login-register-change-container'>
+            <span>{msg}</span>
+            <button onClick={() => this.setState({singUp: !this.state.singUp, email: '', password: ''})}>{buttonChangeMsg}</button>
+          </div>
         </div>
       </div>
     );

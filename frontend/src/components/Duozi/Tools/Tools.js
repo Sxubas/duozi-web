@@ -72,8 +72,8 @@ class Tools extends Component {
       <div>
         <button onClick={() => this.props.navigate('home', {})}>
           <i className='material-icons'>arrow_back</i>
+          <span>Home</span>
         </button>
-        <label>Home</label>
       </div>
     );
     const searchBar = (
@@ -84,7 +84,7 @@ class Tools extends Component {
             value={this.state.text}
             onChange={this.handleChangeText.bind(this)}
           />
-          <button onClick={() => this.ComponentDidMount()}>Search</button>
+          <button onClick={() => this.ComponentDidMount()}><i className="material-icons">search</i>Search</button>
         </div>
       </div>
     );
