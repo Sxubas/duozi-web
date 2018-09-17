@@ -17,10 +17,20 @@ class Collection extends Component {
         pinyins: [
           ''
         ]
+      },
+      editingWord: false,
+      editedWord: {
+        _id: '',
+        simplified: '',
+        traditional: '',
+        pinyins: [
+          ''
+        ]
       }
     };
-    
+
     this.sendForm = this.sendForm.bind(this);
+    this.sendEdit = this.sendEdit.bind(this);
   }
 
   //Fetches data from backend and sets state from route params
@@ -54,17 +64,21 @@ class Collection extends Component {
     this.setState({ newWord: this.state.newWord });
   }
 
-  modifyPinyin(i, event) {
+  modifyAddPinyin(i, event) {
     const replaceWord = this.state.newWord;
-    replaceWord.pinyin[i] = event.target.value;
+    replaceWord.pinyins[i] = event.target.value;
+    this.setState({ newWord: replaceWord });
+  }
+
+  modifyEditPinyin(i, event) {
+    const replaceWord = this.state.newWord;
+    replaceWord.pinyins[i] = event.target.value;
     this.setState({ newWord: replaceWord });
   }
 
   sendForm() {
-
     let formData = this.state.newWord;
     formData.email = this.props.email;
-    console.log(this.props.email);
 
     fetch('/collections', {
       method: 'POST',
@@ -73,29 +87,30 @@ class Collection extends Component {
       },
       body: JSON.stringify(formData)
     }).then(resp => resp.json()).then(json => {
+      this.state.collection.push(this.state.newWord);
       this.setState({
-        newWord: {simplified: '', traditional: '', pinyin: ['']}
+        newWord: { simplified: '', traditional: '', pinyins: [''] }
       });
     });
 
   }
 
-  renderForm() {
+  renderAddForm() {
     return (
       <div className='collection-top-form'>
         <label>
-          Simplified hanzi: 
+          Simplified hanzi:
           <input onInput={event => this.setState({ newWord: { ...this.state.newWord, simplified: event.target.value } })} value={this.state.newWord.simplified} type="text" />
         </label>
         <label>
-          Traditional hanzi: 
+          Traditional hanzi:
           <input onInput={event => this.setState({ newWord: { ...this.state.newWord, traditional: event.target.value } })} value={this.state.newWord.traditional} type="text" />
         </label>
         <label className='collection-top-form-pinyin'>
-          Pinyin:  
+          Pinyin:
           {this.state.newWord.pinyins.map((pinyin, i) =>
             <div key={i}>
-              <input onInput={event => this.modifyPinyin(i, event)} value={this.state.newWord.pinyins[i]} />
+              <input onInput={event => this.modifyAddPinyin(i, event)} value={this.state.newWord.pinyins[i]} />
 
               {i === 0 ? null : <i onClick={() => this.deletePinyin(i)} className="material-icons">remove</i>}
             </div>
@@ -108,9 +123,66 @@ class Collection extends Component {
     );
   }
 
+  sendEdit() {
+    let formData = this.state.editedWord;
+    formData.email = this.props.email;
+
+    fetch('/collections', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    }).then(resp => resp.json()).then(json => {
+      this.state.collection.push(this.state.editedWord);
+      this.setState({
+        editedWord: { simplified: '', traditional: '', pinyins: [''] },
+        editingWord: false
+      });
+    });
+  }
+
+  renderEditForm() {
+    return (
+      <div className='collection-top-form'>
+        <label>
+          Simplified hanzi:
+          <input onInput={event => this.setState({ editedWord: { ...this.state.editedWord, simplified: event.target.value } })} value={this.state.editedWord.simplified} type="text" />
+        </label>
+        <label>
+          Traditional hanzi:
+          <input onInput={event => this.setState({ editedWord: { ...this.state.editedWord, traditional: event.target.value } })} value={this.state.editedWord.traditional} type="text" />
+        </label>
+        <label className='collection-top-form-pinyin'>
+          Pinyin:
+          {this.state.editedWord.pinyins.map((pinyin, i) =>
+            <div key={i}>
+              <input onInput={event => this.modifyEditPinyin(i, event)} value={this.state.editedWord.pinyins[i]} />
+
+              {i === 0 ? null : <i onClick={() => this.state.editedWord.pinyins.splice(i, 1)} className="material-icons">remove</i>}
+            </div>
+          )}
+          <div onClick={() => this.state.editedWord.pinyins.push('')} className='collection-top-form-add-tooltip'><i className='material-icons'>add</i>Add another pinyin</div>
+        </label>
+        <button onClick={this.sendEdit}>Save changes</button>
+        <button onClick={() => this.setState({ editingWord: false })}>Cancel</button>
+      </div>
+    );
+  }
+
+
   renderCharacters() {
     return this.state.collection.map(word =>
-      <CollectionWord word={word} key={word._id} />
+      <CollectionWord
+        word={word}
+        key={word._id}
+        onEdit={() => {
+          this.setState({
+            editingWord: true,
+            editedWord: word
+          })
+        }}
+      />
     );
   }
 
@@ -123,7 +195,7 @@ class Collection extends Component {
               Your Collection
             </h3>
             <small>
-              431 Characters
+              {this.state.collection.length} Characters
             </small>
           </div>
           <div className='collection-top-search'>
@@ -131,7 +203,8 @@ class Collection extends Component {
             <input onInput={event => this.setState({ search: event.target.value })} placeholder='Search by pinyin or hanzi' value={this.state.search} type="text" />
           </div>
         </div>
-        {this.state.addingWord ? this.renderForm() : null}
+        {this.state.addingWord ? this.renderAddForm() : null}
+        {this.state.editingWord ? this.renderEditForm() : null}
         <div className='collection-word-card-container'>
           <div className='collection-add-word' onClick={() => this.setState({ addingWord: !this.state.addingWord })}>
             <i className='material-icons'>{this.state.addingWord ? 'cancel' : 'add'}</i>

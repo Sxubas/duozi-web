@@ -8,10 +8,27 @@
   padding: 6px;
   margin: 4px;
   user-select: text;
+  position: relative;
 }
 
 .collection-word-container strong{
   font-size: 2.6rem;
+}
+
+.collection-word-container .word-edit {
+  position: absolute;
+  cursor: pointer;
+  color: whitesmoke;
+  font-size: 1.3rem;
+  top: 5px;
+  right: 5px;
+  opacity: 0;
+  transition: all 0.2s ease-in-out;
+}
+
+.collection-word-container:hover .word-edit{
+  transform: translateY(-5px) translateX(5px);
+  opacity: 1;
 }
 
 .collection-word-container div p{
