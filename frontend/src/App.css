@@ -1,5 +1,12 @@
+html{
+  background: linear-gradient( 30deg,  #662D8C 0%,  #ED1E79 100%);
+  min-height: 100%;
+  color: var(--black);
+}
+
 .App {
   text-align: center;
+  padding-bottom: 32px;
 }
 
 .App-logo {
@@ -22,7 +29,26 @@
   font-size: large;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+:root{
+  --black: rgb(36, 36, 36);
+}
+
+button{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  margin: 2px;
+  padding: 6px;
+  border-radius: 6px;
+  transition: all 0.3s ease-in-out;
+}
+
+button:hover{
+  background-color: rgb(164, 242, 245);
+}
+
+button:active{
+  background-color: rgb(245, 164, 241);
 }

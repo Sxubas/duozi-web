@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CollectionWord from './../Collection/CollectionWord';
+import './Home.css';
 
 //Renders home View
 class Home extends Component {
@@ -59,7 +60,7 @@ class Home extends Component {
           </h3>
           <small>{this.state.collection.length} characters</small>
           <h4>Added recently</h4>
-          <div>
+          <div className="home-recent-container">
             {this.renderRecentWords()}
           </div>
           <div>
