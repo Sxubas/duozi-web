@@ -54,22 +54,22 @@ class Home extends Component {
   render() {
     return (
       <div className='home-container'>
-        <div className='collection-preview-container'>
+        <div className='home-collection-preview-container'>
           <h3>
             Your Collection
           </h3>
           <small>{this.state.collection.length} characters</small>
           <h4>Added recently</h4>
-          <div className="home-recent-container">
+          <div className='home-recent-container'>
             {this.renderRecentWords()}
           </div>
-          <div>
+          <div className='home-collection-button-container'>
             <button onClick={() => this.props.navigate('collection')}>
-              <i className="material-icons">chevron_right</i>
+              <i className='material-icons'>chevron_right</i>
               Go to your Collection
             </button>
             <button onClick={() => this.props.navigate('collection', {add: true})}>
-              <i className="material-icons">add</i>
+              <i className='material-icons'>add</i>
               Add a new word
             </button>
           </div>
@@ -77,7 +77,7 @@ class Home extends Component {
 
         <div className='vertical-hr'></div>
 
-        <div className='tools-container'>
+        <div className='home-tools-container'>
           <h3>Tools</h3>
           <div>
 
@@ -99,7 +99,7 @@ class Home extends Component {
               <button onClick={() => this.props.navigate('tools', {tool : 'ocr'})}>
                 <i className='material-icons'>image_search</i>
               </button>
-              <label>Extraxt hanzi from image</label>
+              <label>Extract hanzi from image</label>
             </span>
 
             <span>

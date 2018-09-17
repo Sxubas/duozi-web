@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CollectionWord from './CollectionWord';
+import './Collection.css';
 
 class Collection extends Component {
 
@@ -44,12 +45,12 @@ class Collection extends Component {
   }
 
   deletePinyin(index) {
-    this.state.newWord.pinyin.splice(index, 1);
+    this.state.newWord.pinyins.splice(index, 1);
     this.setState({ newWord: this.state.newWord });
   }
 
   addPinyin() {
-    this.state.newWord.pinyin.push('');
+    this.state.newWord.pinyins.push('');
     this.setState({ newWord: this.state.newWord });
   }
 
@@ -81,25 +82,25 @@ class Collection extends Component {
 
   renderForm() {
     return (
-      <div>
+      <div className='collection-top-form'>
         <label>
-          Simplified hanzi
+          Simplified hanzi: 
           <input onInput={event => this.setState({ newWord: { ...this.state.newWord, simplified: event.target.value } })} value={this.state.newWord.simplified} type="text" />
         </label>
         <label>
-          Traditional hanzi
+          Traditional hanzi: 
           <input onInput={event => this.setState({ newWord: { ...this.state.newWord, traditional: event.target.value } })} value={this.state.newWord.traditional} type="text" />
         </label>
-        <label>
-          Pinyin
-          {this.state.newWord.pinyin.map((pinyin, i) =>
+        <label className='collection-top-form-pinyin'>
+          Pinyin:  
+          {this.state.newWord.pinyins.map((pinyin, i) =>
             <div key={i}>
-              <input onInput={event => this.modifyPinyin(i, event)} value={this.state.newWord.pinyin[i]} />
+              <input onInput={event => this.modifyPinyin(i, event)} value={this.state.newWord.pinyins[i]} />
 
               {i === 0 ? null : <i onClick={() => this.deletePinyin(i)} className="material-icons">remove</i>}
             </div>
           )}
-          <i onClick={() => this.addPinyin()} className='material-icons'>add</i>
+          <div onClick={() => this.addPinyin()} className='collection-top-form-add-tooltip'><i className='material-icons'>add</i>Add another pinyin</div>
         </label>
         <button onClick={this.sendForm}>Add word</button>
         <button onClick={() => this.setState({ addingWord: false })}>Cancel</button>
@@ -115,10 +116,9 @@ class Collection extends Component {
 
   render() {
     return (
-      <div>
-        Currently in: collections {this.props.routeParams ? 'with params: ' + JSON.stringify(this.props.routeParams) : 'with no params'}
-        <div>
-          <div>
+      <div className='collection-container'>
+        <div className='collection-top-container'>
+          <div className='collection-top-title'>
             <h3>
               Your Collection
             </h3>
@@ -126,16 +126,16 @@ class Collection extends Component {
               431 Characters
             </small>
           </div>
-          <div>
+          <div className='collection-top-search'>
             <i className="material-icons">search</i>
-            <input onInput={event => this.setState({ search: event.target.value })} value={this.state.search} type="text" />
+            <input onInput={event => this.setState({ search: event.target.value })} placeholder='Search by pinyin or hanzi' value={this.state.search} type="text" />
           </div>
         </div>
         {this.state.addingWord ? this.renderForm() : null}
-        <div>
-          <div onClick={() => this.setState({ addingWord: !this.state.addingWord })}>
+        <div className='collection-word-card-container'>
+          <div className='collection-add-word' onClick={() => this.setState({ addingWord: !this.state.addingWord })}>
             <i className='material-icons'>{this.state.addingWord ? 'cancel' : 'add'}</i>
-            <label>{this.state.addingWord ? 'Cancel' : 'Add new word'}</label>
+            <p>{this.state.addingWord ? 'Cancel' : 'Add new word'}</p>
           </div>
           {this.renderCharacters()}
         </div>

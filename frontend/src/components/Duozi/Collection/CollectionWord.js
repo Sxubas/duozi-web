@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import './CollectionWord.css';
 
 //Component to render a basic word visualization
 class CollectionWord extends Component {
 
   render() {
     return (
-      <div>
+      <div className='collection-word-container'>
         <strong>
           {this.props.mode ? this.props.word.simplified : this.props.word.traditional}
         </strong>

@@ -64,7 +64,7 @@ class Router extends Component {
       <div className='router-container'>
         <div className='header-container'>
           <div>
-            <h1>Duozi</h1>
+            <h1>Duozi - 多字</h1>
             <h2>Toolbox for chinese learners</h2>
           </div>
         </div>

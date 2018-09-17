@@ -1,0 +1,21 @@
+.collection-word-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  border: 4px whitesmoke solid;
+  border-radius: 4px;
+  padding: 6px;
+  margin: 4px;
+  user-select: text;
+}
+
+.collection-word-container strong{
+  font-size: 2.6rem;
+}
+
+.collection-word-container div p{
+  margin: 4px 0;
+  font-size: 1.2rem;
+  user-select: all;
+}

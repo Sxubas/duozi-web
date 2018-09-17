@@ -4,26 +4,27 @@
   margin: 0px 16px;
 }
 
-.collection-preview-container{
+.home-collection-preview-container{
   display: flex;
+  flex: 1;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
 }
 
-.collection-preview-container h3{
-  font-size: 2.4rem;
+.home-collection-preview-container h3{
+  font-size: 2.8rem;
   margin: 0;
-  margin-top: 16px;
+  margin-top: 8px;
 }
 
-.collection-preview-container small{
+.home-collection-preview-container small{
   margin-left: 4px;
   font-size: 1rem;
 }
 
-.collection-preview-container h4{
-  font-size: 1.4rem;
+.home-collection-preview-container h4{
+  font-size: 2.2rem;
   margin: 0;
   margin-top: 16px;
 }
@@ -32,4 +33,54 @@
   display: flex;
   flex-direction: row;
   width: 100%;
+}
+
+.home-collection-button-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 16px;
+  width: 100%;
+}
+
+.vertical-hr{
+  height: 100%;
+  width: 4px;
+  margin: 0 8px;
+  background-color: whitesmoke;
+}
+
+.home-tools-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  flex: 1;
+}
+
+.home-tools-container h3{
+  font-size: 2.8rem;
+  margin: 0;
+  margin-top: 8px; 
+}
+
+.home-tools-container div{
+  width: 100%;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-gap: 16px;
+}
+
+.home-tools-container span{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 8px 0;
+  font-size: 1.4rem;
+}
+
+.home-tools-container span button i{
+  font-size: 2.8rem;
 }
