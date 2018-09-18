@@ -5,6 +5,9 @@ import Tools from './Tools/Tools';
 import Home from './Home/Home';
 import './Router.css';
 
+Consider using reactstrap for nicer looking components, or you can also add bootsstrap in the public index.html 
+and use className attribute to use Bootstrap classes!
+
 //'Root' App component which is in charge of routing to different components
 class Router extends Component {
 
