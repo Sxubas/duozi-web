@@ -45,7 +45,7 @@ const mongoSetup = (callback) => {
 const expressSetup = (mongoClient) => {
 
   const db = mongoClient.db('duozi');
-All this looks nice but consider using a router to setup your end points more organized, ex /api/users.js, contains all the end points refering to user
+All this looks nice but consider using a -->router<-- to setup your end points more organized, ex /api/users.js, contains all the end points refering to user
 Same thing for the collections resources
 //CRUD Users
   app.get('/users', (req, res) => {
