@@ -1,3 +1,6 @@
+
+Buen readme, explicativo y claro.
+
 # Duozi
 Web application tool for early mandarin learners.
 This application allows you to store the chinese words you have learned and also provides useful tools, like pinyin search from Hanzi, or viceversa. It also includes a dictionary search allowing searching by meaning, pinyin or hanzi (characters) and a chinese text recognition (or extraction) tool from images [OCR]. 
